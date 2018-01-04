@@ -33,7 +33,7 @@ module.exports = input => {
     }
     
     visited.add(position);
-    
+
     [-1, 0, 1].forEach(dx => 
       [-1, 0, 1].forEach(dy => {
         if (Math.abs(dx) ^ Math.abs(dy) && x + dx >= 0 && x + dx <= size - 1 && y + dy >= 0 && y + dy <= size - 1) {

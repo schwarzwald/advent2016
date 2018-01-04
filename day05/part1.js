@@ -8,7 +8,6 @@ module.exports = input => {
     let hash = md5(input + counter);
     
     if (hash.startsWith('00000')) {
-      console.log(counter, hash);
       password += hash[5];
     }
     
