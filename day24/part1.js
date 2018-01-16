@@ -18,7 +18,7 @@ const distance = ([x1, y1], [x2, y2], grid) => {
     
     [-1, 0, 1].forEach(dy =>
       [-1, 0, 1].forEach(dx => {
-        if (dx * dx ^ dy * dy && grid[y + dy] && grid[y + dy][x + dx] && grid[y + dy][x + dx] != '#') {
+        if (dx * dx ^ dy * dy && grid[y + dy] && grid[y + dy][x + dx]) {
           queue.push([x + dx, y + dy, distance + 1]);
         }
       })
@@ -49,11 +49,10 @@ const permutator = (arr) => {
 }
 
 module.exports = input => {
-  let rows = input.split('\r\n');
   let grid = [];
   let goals = new Map();
   
-  rows.forEach((row, y) => {
+  input.split('\r\n').forEach((row, y) => {
     grid[y] = [];
     [...row].forEach((cell, x) => {
       grid[y][x] = cell != '#';
