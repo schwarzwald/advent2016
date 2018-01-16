@@ -1,43 +1,28 @@
 const distance = ([x1, y1], [x2, y2], grid) => {
-  const manhattan = ([x1, y1], [x2, y2]) => Math.abs(x2 - x1) + Math.abs(y2 - y1);
-  
-  let visited = [];
-  let queue = [{ x: x1, y: y1, fScore: manhattan([x1, y1], [x2, y2]), gScore: 0 }];
+  let visited = new Set();
+  let queue = [[x1, y1, 0]];
   
   while (queue.length) {
-    let current = queue.shift();
-    if (current.x == x2 && current.y == y2) {
-      return current.gScore;
+    let [x, y, distance] = queue.shift();
+    let id = `${x}-${y}`;
+    
+    if (visited.has(id)) {
+      continue;
     }
     
-    visited.push(current);
+    if (x == x2 && y == y2) {
+      return distance;
+    }
+    
+    visited.add(id);
     
     [-1, 0, 1].forEach(dy =>
       [-1, 0, 1].forEach(dx => {
-        if ((dx * dx) ^ (dy * dy) && grid[current.y + dy] && grid[current.y + dy][current.x + dx]) {
-          if (grid[current.y + dy][current.x + dx] != '#') {
-            if (visited.some(({x, y}) => x == current.x + dx && y == current.y + dy)) {
-              return;
-            }
-            
-            if (!queue.some(({x, y}) => x == current.x + dx && y == current.y + dy)) {
-              queue.push({ x : current.x + dx, y : current.y + dy, fScore: Infinity, gScore: current.gScore + 1}); 
-            }
-            
-            let neighbor = queue.find(({x, y}) => x == current.x + dx && y == current.y + dy);
-            
-            if (neighbor.gScore < current.gScore + 1) {
-              return;
-            }
-            
-            neighbor.gScore = current.gScore + 1;
-            neighbor.fScore = neighbor.gScore + manhattan([neighbor.x, neighbor.y], [x2, y2]);
-          }
+        if (dx * dx ^ dy * dy && grid[y + dy] && grid[y + dy][x + dx] && grid[y + dy][x + dx] != '#') {
+          queue.push([x + dx, y + dy, distance + 1]);
         }
       })
     );
-    
-    queue.sort((a, b) => a.fScore - b.fScore);
   }
   
   return null;
